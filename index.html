@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title data-lang-zh="G-code 可视化工具" data-lang-en="G-code Visualization Tool">G-code 可视化工具</title>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <!-- 添加语言切换按钮 -->
+    <div class="language-switcher">
+        <button id="lang-zh" class="lang-btn active" title="中文" type="button">中文</button>
+        <button id="lang-en" class="lang-btn" title="English" type="button">English</button>
+    </div>
+    
+    <div class="container">
+        <!-- 添加表格区域 -->
+        <div class="table-area">
+            <h2 data-lang-zh="坐标表格" data-lang-en="Coordinate Table">坐标表格</h2>
+            <div class="table-toolbar">
+                <button id="update-table" title="从G代码更新表格" data-lang-title-zh="从G代码更新表格" data-lang-title-en="Update table from G-code">↓</button>
+                <button id="apply-table" title="应用表格到G代码" data-lang-title-zh="应用表格到G代码" data-lang-title-en="Apply table to G-code">↑</button>
+                <button id="add-row" title="添加行" data-lang-title-zh="添加行" data-lang-title-en="Add row">+</button>
+                <button id="delete-row" title="删除选中行" data-lang-title-zh="删除选中行" data-lang-title-en="Delete selected row">-</button>
+            </div>
+            <div class="table-container">
+                <table id="gcode-table">
+                    <thead>
+                        <tr>
+                            <th data-lang-zh="序号" data-lang-en="Index">序号</th>
+                            <th>X</th>
+                            <th>Y</th>
+                            <th>Z</th>
+                            <th>F</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 表格内容将通过JavaScript动态生成 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <h2>
+                <span data-lang-zh="G-code 编辑器" data-lang-en="G-code Editor">G-code 编辑器</span>
+                <small data-lang-zh="(实时渲染)" data-lang-en="(Real-time Rendering)">(实时渲染)</small>
+            </h2>
+            
+            <!-- 编辑器工具栏 -->
+            <div class="editor-toolbar">
+                <button id="search-toggle" title="查找/替换" data-lang-title-zh="查找/替换" data-lang-title-en="Find/Replace">🔍</button>
+                <button id="format-btn" title="格式化代码" data-lang-title-zh="格式化代码" data-lang-title-en="Format code">📝</button>
+                <button id="check-btn" title="检查错误" data-lang-title-zh="检查错误" data-lang-title-en="Check errors">⚠️</button>
+                <button id="run-button" title="刷新渲染" data-lang-title-zh="刷新渲染" data-lang-title-en="Refresh rendering">🔄</button>
+            </div>
+            
+            <!-- 查找/替换面板 -->
+            <div id="search-panel" class="hidden">
+                <div class="search-row">
+                    <input type="text" id="search-input" placeholder="查找内容..." data-lang-placeholder-zh="查找内容..." data-lang-placeholder-en="Find...">
+                    <button id="search-prev" title="上一个匹配" data-lang-title-zh="上一个匹配" data-lang-title-en="Previous match">↑</button>
+                    <button id="search-next" title="下一个匹配" data-lang-title-zh="下一个匹配" data-lang-title-en="Next match">↓</button>
+                    <span id="search-count"></span>
+                </div>
+                <div class="search-row">
+                    <input type="text" id="replace-input" placeholder="替换为..." data-lang-placeholder-zh="替换为..." data-lang-placeholder-en="Replace with...">
+                    <button id="replace-btn" data-lang-zh="替换" data-lang-en="Replace">替换</button>
+                    <button id="replace-all-btn" data-lang-zh="全部替换" data-lang-en="Replace All">全部替换</button>
+                </div>
+                <div class="search-options">
+                    <label><input type="checkbox" id="case-sensitive"> <span data-lang-zh="区分大小写" data-lang-en="Case sensitive">区分大小写</span></label>
+                    <label><input type="checkbox" id="whole-word"> <span data-lang-zh="全字匹配" data-lang-en="Whole word">全字匹配</span></label>
+                </div>
+            </div>
+            
+            <!-- 错误检查面板 -->
+            <div id="error-panel" class="hidden">
+                <div class="panel-header">
+                    <h3 data-lang-zh="G-code 错误检查" data-lang-en="G-code Error Check">G-code 错误检查</h3>
+                    <button id="close-error-panel">×</button>
+                </div>
+                <div id="error-list"></div>
+            </div>
+            
+            <div class="editor-container">
+                <div id="line-numbers" class="line-numbers"></div>
+                <div id="gcode-editor" class="editor"></div>
+            </div>
+            <div class="info" data-lang-zh="红色点表示路径节点，数字为节点编号。左侧数字对应右侧节点编号。" data-lang-en="Red dots represent path nodes, numbers are node indices. Left numbers correspond to right node indices.">红色点表示路径节点，数字为节点编号。左侧数字对应右侧节点编号。</div>
+        </div>
+        <div class="canvas-area">
+            <canvas id="gcode-canvas"></canvas>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
